@@ -35,6 +35,7 @@ local specwarnClassCall		= mod:NewSpecialWarning("specwarnClassCall", nil, nil, 
 local timerPhase			= mod:NewPhaseTimer(15)
 local timerClassCall		= mod:NewTimer(25, "TimerClassCall", "136116", nil, nil, 5)
 local timerFearNext			= mod:NewCDTimer(25, 22686, nil, nil, 3, 2)--26-42.5
+local timerShadowFlameCD	= mod:NewCDTimer(18, 22539, nil, false)
 
 mod.vb.addLeft = 42
 local addsGuidCheck = {}
@@ -76,6 +77,7 @@ do
 		--if args.spellId == 22539 then
 		if args.spellName == ShadowFlame then
 			warnShadowFlame:Show()
+			timerShadowFlameCD:Start()
 		--elseif args.spellId == 22686 then
 		elseif args.spellName == BellowingRoar then
 			warnFear:Show()
@@ -162,6 +164,8 @@ function mod:OnSync(msg, arg)
 		if phase == 2 then
 			self:SetStage(2)
 			timerPhase:Start(15)--15 til encounter start fires, not til actual land?
+			timerFearNext:Start(15+25)
+			timerShadowFlameCD:Start(15+18)
 			--timerFearNext:Start(46.6)
 		elseif phase == 3 then
 			self:SetStage(3)

@@ -20,6 +20,13 @@ local warnKnockAway		= mod:NewSpellAnnounce(18670, 3)
 local warnMortal		= mod:NewTargetNoFilterAnnounce(24573, 2, nil, "Tank|Healer", 4)
 
 local timerMortal		= mod:NewTargetTimer(5, 24573, nil, "Tank|Healer", 4, 5, nil, DBM_CORE_L.TANK_ICON)
+local timerMortalCD		= mod:NewCDTimer(20, 24573, nil, false)
+
+
+
+function mod:OnCombatStart(delay)
+	timerMortalCD:Start(25-delay)
+end
 
 do
 	local BlastWave, KnockAway = DBM:GetSpellInfo(23331), DBM:GetSpellInfo(18670)
@@ -41,6 +48,7 @@ do
 		if args.spellName == MortalStrike and args:IsDestTypePlayer() then
 			warnMortal:Show(args.destName)
 			timerMortal:Start(args.destName)
+			timerMortalCD:Start()
 		end
 	end
 
