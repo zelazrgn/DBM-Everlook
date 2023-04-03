@@ -33,7 +33,7 @@ local specwarnVeilShadow	= mod:NewSpecialWarningDispel(22687, "RemoveCurse", nil
 local specwarnClassCall		= mod:NewSpecialWarning("specwarnClassCall", nil, nil, nil, 1, 2)
 
 local timerPhase			= mod:NewPhaseTimer(15)
-local timerClassCall		= mod:NewTimer(30, "TimerClassCall", "136116", nil, nil, 5)
+local timerClassCall		= mod:NewTimer(25, "TimerClassCall", "136116", nil, nil, 5)
 local timerFearNext			= mod:NewCDTimer(25, 22686, nil, nil, 3, 2)--26-42.5
 
 mod.vb.addLeft = 42
@@ -177,6 +177,6 @@ function mod:OnSync(msg, arg)
 		else
 			warnClassCall:Show(className)
 		end
-		timerClassCall:Start(30, className)
+		timerClassCall:Start(25, className)
 	end
 end

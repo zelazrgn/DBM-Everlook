@@ -2,7 +2,7 @@ if GetLocale() ~= "frFR" then return end
 if not DBM_GUI_L then DBM_GUI_L = {} end
 local L = DBM_GUI_L
 
-L.MainFrame = "Deadly Boss Mods"
+L.MainFrame = "Deadly Boss Mods (Everlook)"
 
 L.TranslationBy 			= "Psyco/Sasmira/Pettigrow/Edoz@EU-Ysondre/Leybola@EU-Sargeras/Noleen@EU-Hyjal"
 

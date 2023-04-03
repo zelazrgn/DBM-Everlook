@@ -16,6 +16,7 @@
 ## SavedVariables: DBMZG_AllSavedVars
 ## SavedVariablesPerCharacter: DBMZG_SavedStats
 ## X-DBM-Mod: 1
+## X-DBM-Mod-Name: Zul'Gurub (Everlook)
 ## X-DBM-Mod-Category: Classic
 ## X-DBM-StatTypes: normal
 ## X-DBM-Mod-Sort: 1104

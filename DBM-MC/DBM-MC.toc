@@ -15,6 +15,7 @@
 ## SavedVariables: DBMMC_AllSavedVars
 ## SavedVariablesPerCharacter: DBMMC_SavedStats
 ## X-DBM-Mod: 1
+## X-DBM-Mod-Name: Molten Core (Everlook)
 ## X-DBM-Mod-Type: RAID
 ## X-DBM-Mod-Category: Classic
 ## X-DBM-StatTypes: normal

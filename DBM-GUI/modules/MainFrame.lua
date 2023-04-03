@@ -82,7 +82,7 @@ end)
 local frameHeader = frame:CreateTexture("$parentHeader", "ARTWORK")
 frameHeader:SetPoint("TOP", 0, 12)
 frameHeader:SetTexture(131080) -- "Interface\\DialogFrame\\UI-DialogBox-Header"
-frameHeader:SetSize(300, 68)
+frameHeader:SetSize(400, 68)
 
 local frameHeaderText = frame:CreateFontString("$parentHeaderText", "ARTWORK", "GameFontNormal")
 frameHeaderText:SetPoint("TOP", frameHeader, 0, -14)

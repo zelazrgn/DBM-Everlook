@@ -15,6 +15,7 @@
 ## SavedVariables: DBMBWL_AllSavedVars
 ## SavedVariablesPerCharacter: DBMBWL_SavedStats
 ## X-DBM-Mod: 1
+## X-DBM-Mod-Name: Blackwing Lair (Everlook)
 ## X-DBM-Mod-Type: RAID
 ## X-DBM-Mod-Category: Classic
 ## X-DBM-StatTypes: normal

@@ -16,6 +16,7 @@
 ## SavedVariables: DBMOnyxia_AllSavedVars
 ## SavedVariablesPerCharacter: DBMOnyxia_SavedStats
 ## X-DBM-Mod: 1
+## X-DBM-Mod-Name: Onyxia's Lair (Everlook)
 ## X-DBM-Mod-Type: RAID
 ## X-DBM-Mod-Category: Classic
 ## X-DBM-StatTypes: normal
