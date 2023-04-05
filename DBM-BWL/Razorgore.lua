@@ -14,7 +14,7 @@ mod:SetWipeTime(180)--guesswork
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 22425",
-	"SPELL_CAST_SUCCESS 23040 19873",
+	"SPELL_CAST_SUCCESS 22425 23040 19873",
 	"SPELL_AURA_APPLIED 23023",
 	"CHAT_MSG_MONSTER_EMOTE",
 --	"CHAT_MSG_MONSTER_YELL",
@@ -30,6 +30,8 @@ local warnEggsLeft			= mod:NewCountAnnounce(19873, 1)
 local specWarnFireballVolley= mod:NewSpecialWarningMoveTo(22425, false, nil, nil, 2, 2)
 
 local timerAddsSpawn		= mod:NewTimer(47, "TimerAddsSpawn", 19879, nil, nil, 1)--Only for start of adds, not adds after the adds.
+local timerFireballVolley	= mod:NewCDTimer(15, 22425, nil, false)
+local timerConflag	= mod:NewCDTimer(15, 23023, nil, false)
 
 mod:AddSpeedClearOption("BWL", true)
 
@@ -65,7 +67,7 @@ do
 end
 
 do
-	local warmingFlames, destroyEgg = DBM:GetSpellInfo(23040), DBM:GetSpellInfo(19873)
+	local warmingFlames, destroyEgg, fireballVolley = DBM:GetSpellInfo(23040), DBM:GetSpellInfo(19873), DBM:GetSpellInfo(22425)
 	function mod:SPELL_CAST_SUCCESS(args)
 		--if args.spellId == 23023 and args:IsDestTypePlayer() then
 		if args.spellName == warmingFlames and self.vb.phase < 2 then
@@ -76,6 +78,8 @@ do
 		elseif args.spellName == destroyEgg then
 			self.vb.eggsLeft = self.vb.eggsLeft - 1
 			warnEggsLeft:Show(string.format("%d/%d",30-self.vb.eggsLeft,30))
+		elseif args.spellName == fireballVolley then
+			timerFireballVolley:Start()
 		end
 	end
 end
@@ -85,7 +89,10 @@ do
 	function mod:SPELL_AURA_APPLIED(args)
 		--if args.spellId == 23023 and args:IsDestTypePlayer() then
 		if args.spellName == Conflagration and args:IsDestTypePlayer() then
-			warnConflagration:CombinedShow(0.3, args.destName)
+			timerConflag:Start(15)
+			if args:IsDestTypePlayer() then
+				warnConflagration:CombinedShow(0.3, args.destName)
+			end
 		end
 	end
 end

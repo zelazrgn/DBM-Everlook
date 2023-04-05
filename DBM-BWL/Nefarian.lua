@@ -15,7 +15,7 @@ mod:RegisterEvents(
 )
 
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 22539 22686",
+	"SPELL_CAST_START 22539 22686 22665",
 	"SPELL_AURA_APPLIED 22687 22667",
 	"UNIT_DIED",
 	"UNIT_HEALTH mouseover target"
@@ -36,6 +36,7 @@ local timerPhase			= mod:NewPhaseTimer(15)
 local timerClassCall		= mod:NewTimer(25, "TimerClassCall", "136116", nil, nil, 5)
 local timerFearNext			= mod:NewCDTimer(25, 22686, nil, nil, 3, 2)--26-42.5
 local timerShadowFlameCD	= mod:NewCDTimer(18, 22539, nil, false)
+local timerShadowBoltVolley	= mod:NewCDTimer(15, 22665, nil, false)
 
 mod.vb.addLeft = 42
 local addsGuidCheck = {}
@@ -45,6 +46,7 @@ function mod:OnCombatStart(delay, yellTriggered)
 	table.wipe(addsGuidCheck)
 	self.vb.addLeft = 42
 	self:SetStage(1)
+	timerShadowBoltVolley:Start(15)
 end
 
 function mod:OnCombatEnd(wipe)
@@ -72,7 +74,7 @@ function mod:OnCombatEnd(wipe)
 end
 
 do
-	local ShadowFlame, BellowingRoar = DBM:GetSpellInfo(22539), DBM:GetSpellInfo(22686)
+	local ShadowFlame, BellowingRoar, ShadowBoltVolley = DBM:GetSpellInfo(22539), DBM:GetSpellInfo(22686), DBM:GetSpellInfo(22665)
 	function mod:SPELL_CAST_START(args)
 		--if args.spellId == 22539 then
 		if args.spellName == ShadowFlame then
@@ -82,6 +84,8 @@ do
 		elseif args.spellName == BellowingRoar then
 			warnFear:Show()
 			timerFearNext:Start()
+		elseif args.spellName == ShadowBoltVolley then
+			timerShadowBoltVolley:Start()
 		end
 	end
 end
