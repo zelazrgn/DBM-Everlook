@@ -1,14 +1,28 @@
-local mod	= DBM:NewMod("TalonGuards", "DBM-BWL", 1)
+local mod	= DBM:NewMod("LabPacks", "DBM-BWL", 1)
 local L		= mod:GetLocalizedStrings()
 
+local GreaterPolymorphIcon1 = 5
+local GreaterPolymorphIcon2 = 3
+
 mod:SetRevision("20200527025231")
-mod:SetCreatureID(12460, 99999)--99999 to prevent mod from ending combat after one of each talon guard type die. Mod will effectively ALWAYS wipe, but it has disabled stats/reporting so irrelevant
-mod:SetModelID(12460)
+mod:SetCreatureID(13996, 12457, 12461, 99999)--99999 to prevent mod from ending combat after one of each talon guard type die. Mod will effectively ALWAYS wipe, but it has disabled stats/reporting so irrelevant
+mod:SetModelID(13996)
 mod:RegisterCombat("combat")
 mod.noStatistics = true
+mod:SetUsedIcons(GreaterPolymorphIcon1, GreaterPolymorphIcon2)
 
+mod.vb.numPoly = 0
+
+mod:RegisterEventsInCombat(
+	"SPELL_AURA_APPLIED 22274",
+	"SPELL_AURA_REMOVED 22274"
+)
+
+local warningPolymorph	= mod:NewTargetNoFilterAnnounce(22274, 2)
 local warnVuln			= mod:NewAnnounce("WarnVulnerable", 1, false)
 
+mod:AddSetIconOption("SetIconOnPolymorph", 22274, false, false, {GreaterPolymorphIcon1, GreaterPolymorphIcon2})
+mod:AddBoolOption("WarnGreaterPolymorphChat")
 mod:AddNamePlateOption("NPAuraOnVulnerable", 22277)
 
 local vulnerabilities = {
@@ -21,7 +35,6 @@ local lastAnnounce = {
 
 --Constants
 local vulnMobs = {
-	[12460] = true,--"Death Talon Wyrmguard"
 	[12461] = true,--"Death Talon Overseer"
 }
 
@@ -102,6 +115,8 @@ local function check_target_vulns(self)
 end
 
 function mod:OnCombatStart()
+	self.vb.numPoly = 0
+
 	table.wipe(vulnerabilities)
 	if self.Options.WarnVulnerable then--Don't register high cpu combat log events if option isn't enabled
 		self:RegisterShortTermEvents(
@@ -129,4 +144,46 @@ end
 
 function mod:PLAYER_TARGET_CHANGED()
 	check_target_vulns(self)
+end
+
+do
+	local GreaterPolymorph = DBM:GetSpellInfo(22274)
+
+	local icon = nil
+
+	function mod:SPELL_AURA_APPLIED(args)
+		if args.spellName == GreaterPolymorph and args:IsDestTypePlayer() then
+			self.vb.numPoly = self.vb.numPoly + 1
+			warningPolymorph:Show(args.destName)
+			if self.Options.SetIconOnPolymorph then
+				icon = self.vb.numPoly == 1 and GreaterPolymorphIcon1 or GreaterPolymorphIcon2
+				self:SetIcon(args.destName, icon)
+			end
+			if self.Options.WarnGreaterPolymorphChat then
+				SendChatMessage("DISPEL: " .. args.destName .. "!", "RAID")
+			end
+		end
+	end
+
+	function mod:SPELL_AURA_REMOVED(args)
+		self.vb.numPoly = self.vb.numPoly - 1
+		if args.spellName == GreaterPolymorph and args:IsDestTypePlayer() then
+			if self.Options.SetIconOnPolymorph then
+				local target = args.destName
+				local uId = DBM:GetRaidUnitId(target)
+				if uId or UnitExists(target) then
+					uId = uId or target
+					local currentIcon = self:GetIcon(uId)
+					if currentIcon == GreaterPolymorphIcon1 or currentIcon == GreaterPolymorphIcon2 then
+						if self.iconRestore[uId] then
+							self:SetIcon(target, self.iconRestore[uId])
+							self.iconRestore[uId] = nil
+						else
+							self:RemoveIcon(target)
+						end
+					end
+				end
+			end
+		end
+	end
 end

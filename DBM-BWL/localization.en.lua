@@ -73,6 +73,19 @@ L:SetGeneralLocalization{
 	name = "Flamegor"
 }
 
+-----------------------
+--  Lab Packs  --
+-----------------------
+L = DBM:GetModLocalization("LabPacks")
+
+L:SetGeneralLocalization{
+	name = "Lab Packs"
+}
+
+L:SetOptionLocalization{
+	WarnGreaterPolymorphChat	= "Warn Greater Polymorph in chat (for non-DBM users)"
+}
+
 
 -----------------------
 --  Vulnerabilities  --
