@@ -9,6 +9,7 @@ mod:RegisterCombat("combat_yell", L.YellP1)--ENCOUNTER_START appears to fire whe
 mod:SetWipeTime(50)--guesswork
 mod:SetHotfixNoticeRev(20200310000000)--2020, Mar, 10th
 mod:SetMinSyncRevision(20200310000000)--2020, Mar, 10th
+mod:SetUsedIcons(3)
 
 mod:RegisterEvents(
 	"CHAT_MSG_MONSTER_YELL"
@@ -16,6 +17,7 @@ mod:RegisterEvents(
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 22539 22686 22665",
+	"SPELL_CAST_SUCCESS 22677",
 	"SPELL_AURA_APPLIED 22687 22667",
 	"UNIT_DIED",
 	"UNIT_HEALTH mouseover target"
@@ -31,12 +33,16 @@ local warnFear				= mod:NewCastAnnounce(22686, 2)
 local specwarnShadowCommand	= mod:NewSpecialWarningTarget(22667, nil, nil, 2, 1, 2)
 local specwarnVeilShadow	= mod:NewSpecialWarningDispel(22687, "RemoveCurse", nil, nil, 1, 2)
 local specwarnClassCall		= mod:NewSpecialWarning("specwarnClassCall", nil, nil, nil, 1, 2)
+local specwarnShadowBolt	= mod:NewSpecialWarningTarget(22677)
 
 local timerPhase			= mod:NewPhaseTimer(15)
 local timerClassCall		= mod:NewTimer(25, "TimerClassCall", "136116", nil, nil, 5)
 local timerFearNext			= mod:NewCDTimer(25, 22686, nil, nil, 3, 2)--26-42.5
 local timerShadowFlameCD	= mod:NewCDTimer(18, 22539, nil, false)
 local timerShadowBoltVolley	= mod:NewCDTimer(15, 22665, nil, false)
+
+mod:AddSetIconOption("SetIconOnShadowBolt", 22677, false, false, {3})
+mod:AddBoolOption("WarnShadowBoltChat")
 
 mod.vb.addLeft = 42
 local addsGuidCheck = {}
@@ -69,6 +75,27 @@ function mod:OnCombatEnd(wipe)
 				end
 			end
 			firstBossMod.vb.firstEngageTime = nil
+		end
+	end
+end
+
+do
+	local shadowbolt = DBM:GetSpellInfo(22677)
+	local lastTarget = nil
+
+	function mod:SPELL_CAST_SUCCESS(args)
+		if args.spellName == shadowbolt then
+			local targetName = args.destName;
+			if not targetName then return end
+			if lastTarget == targetName then return end
+			lastTarget = targetName
+			specwarnShadowBolt:Show(targetName)
+			if self.Options.WarnShadowBoltChat then
+				SendChatMessage("New Shadow Bolt target: " .. targetName .. "!", "RAID")
+			end
+			if self.Options.SetIconOnShadowBolt then
+				self:SetIcon(targetName, 3)
+			end
 		end
 	end
 end

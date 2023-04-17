@@ -156,7 +156,8 @@ L:SetOptionLocalization{
 	TimerClassCall		= "Show timer for class call duration",
 	WarnAddsLeft		= "Announce kills remaining until Stage 2 is triggered",
 	WarnClassCall		= "Announce class calls",
-	specwarnClassCall	= "Show Special warning when you are affected by class call"
+	specwarnClassCall	= "Show Special warning when you are affected by class call",
+	WarnShadowBoltChat  = "Warn Shadow Bolt in chat (for non-DBM users)"
 }
 L:SetMiscLocalization{
 	YellP1		= "Let the games begin!",
