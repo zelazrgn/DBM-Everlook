@@ -84,7 +84,8 @@ do
 	local lastTarget = nil
 
 	function mod:SPELL_CAST_SUCCESS(args)
-		if args.spellName == shadowbolt then
+		local creatureID = self:GetCIDFromGUID(args.sourceGUID)
+		if creatureID == 10162 and args.spellName == shadowbolt then
 			local targetName = args.destName;
 			if not targetName then return end
 			if lastTarget == targetName then return end
