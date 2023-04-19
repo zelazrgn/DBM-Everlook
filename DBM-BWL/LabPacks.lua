@@ -22,7 +22,7 @@ local warningPolymorph	= mod:NewTargetNoFilterAnnounce(22274, 2)
 local warnVuln			= mod:NewAnnounce("WarnVulnerable", 1, false)
 
 mod:AddSetIconOption("SetIconOnPolymorph", 22274, false, false, {GreaterPolymorphIcon1, GreaterPolymorphIcon2})
-mod:AddBoolOption("WarnGreaterPolymorphChat")
+mod:AddBoolOption("WarnGreaterPolymorphChat", false)
 mod:AddNamePlateOption("NPAuraOnVulnerable", 22277)
 
 local vulnerabilities = {

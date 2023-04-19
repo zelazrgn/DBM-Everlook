@@ -42,7 +42,7 @@ local timerShadowFlameCD	= mod:NewCDTimer(18, 22539, nil, false)
 local timerShadowBoltVolley	= mod:NewCDTimer(15, 22665, nil, false)
 
 mod:AddSetIconOption("SetIconOnShadowBolt", 22677, false, false, {3})
-mod:AddBoolOption("WarnShadowBoltChat")
+mod:AddBoolOption("WarnShadowBoltChat", false)
 
 mod.vb.addLeft = 42
 local addsGuidCheck = {}
